@@ -9,7 +9,6 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { TiltCard } from '@/components/ui/tilt-card';
 import { MagnetizeButton } from '@/components/ui/magnetize-button';
 import PricingSection4 from "@/components/ui/pricing-section-4";
-import Testimonials2 from "@/components/ui/testimonials-2";
 import { PhoneMockup3D } from '@/components/hero/PhoneMockup3D';
 import { SHOWCASE_ITEMS } from '@/data/showcase';
 import { VideoCard } from '@/components/showcase/VideoCard';
@@ -534,8 +533,9 @@ export function Home() {
         </div>
       </section>
 
-      {/* S6.5 TESTIMONIALS — vertical autoplay carousel */}
-      <Testimonials2 />
+      {/* S6.5 TESTIMONIALS — retirée temporairement. Pour réactiver : rétablir
+          l'import « Testimonials2 » et réinsérer <Testimonials2 /> ici (le
+          composant src/components/ui/testimonials-2.tsx est conservé intact). */}
 
       {/* S7 PRICING */}
       <section id="offres" className="scroll-mt-[96px] border-t border-primary/20 bg-card/90 pb-28 dark:bg-foreground/10">
