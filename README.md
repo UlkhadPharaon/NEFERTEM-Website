@@ -1,16 +1,18 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# NEFERTEM — Site vitrine « AI Growth Systems »
 
-# Run and deploy your AI Studio app
+[![Live](https://img.shields.io/badge/live-nefertem.pages.dev-0a0a0a?logo=cloudflare&logoColor=f6821f)](https://nefertem.pages.dev)
+![Stack](https://img.shields.io/badge/stack-Vite%206%20%2B%20React%2019%20%2B%20Tailwind%204-blue)
+![Deploy](https://img.shields.io/badge/deploy-Cloudflare%20Pages-orange)
 
-This contains everything you need to run your app locally.
+Site vitrine NEFERTEM (Ouagadougou) — la croissance devient un système.
 
-View your app in AI Studio: https://ai.studio/apps/3717e368-c540-4ef1-84b8-4d96c1595c54
+- **Production** : https://nefertem.pages.dev (Cloudflare Pages, projet `nefertem`, branche `main`)
+- **Repo GitHub** : https://github.com/UlkhadPharaon/NEFERTEM-Website
+- **SPA** : `public/_redirects` (`/* /index.html 200`, `/contact` → `/demarrer`)
 
-## Run Locally
+## Développement local
 
-**Prerequisites:**  Node.js
+**Prérequis :** Node.js 20+.
 
 
 1. Install dependencies:
@@ -47,9 +49,28 @@ sector, pains[], goal, networks[], pageUrl, plan, period, price, src,
 utm{source,medium,campaign}, recommendedPlan, completed}`. A partial lead
 (`completed:false`) is saved after step 1 and updated at the end.
 
-## Deployment
+## Déploiement
 
-- **Vercel** : preset Vite, build `npm run build`, output `dist`.
-  `vercel.json` rewrites everything to `/index.html` except `/api/*`.
-- **Cloudflare Pages** : see `CLOUDFLARE.md`. Build `npm run build`,
-  output `dist`, Node 20, `PUPPETEER_SKIP_DOWNLOAD=true`.
+Méthode actuelle : **Cloudflare Pages en Direct Upload** (CLI wrangler), repo Git séparé.
+
+1. Build : `npm run build` (sortie `dist/`) — en session agent, wrapper one-shot
+   type `build-runner.mjs` pour éviter le guard watch-process.
+2. Déploiement production :
+   ```bash
+   npx wrangler pages deploy dist --project-name nefertem --branch main --commit-dirty true
+   ```
+   (`--branch main` obligatoire : sans ça le build atterrit sur une branche preview
+   et `nefertem.pages.dev` continue de servir l'ancien.)
+3. Vérifier le domaine canonique :
+   ```bash
+   curl -sS -o /dev/null -w '%{http_code}\n' https://nefertem.pages.dev/   # 200
+   ```
+
+Connexion Git (auto-deploy sur push) : dashboard Cloudflare → Workers & Pages →
+`nefertem` → Settings → Build & deployments → **Connect to Git repository** →
+`UlkhadPharaon/NEFERTEM-Website`, branche `main`, build `npm run build`, sortie `dist`,
+env `PUPPETEER_SKIP_DOWNLOAD=true`. (L'API refuse `source` sur un projet Direct
+Upload — la connexion doit passer par le dashboard.)
+
+L'ancien repo (`Voix-d-or-marketing-offers-2`) reste conservé en remote `old`
+(`git remote -v`). Détails et dépannage : `CLOUDFLARE.md`.

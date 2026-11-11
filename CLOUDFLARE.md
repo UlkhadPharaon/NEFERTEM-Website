@@ -2,19 +2,38 @@
 
 Site statique Vite + React (SPA). Aucune variable d'environnement requise pour le build.
 
-## Option recommandée : connecter GitHub (2 min)
+**État actuel (11 nov. 2026)** : projet Pages `nefertem` en **Direct Upload** (CLI),
+repo source `UlkhadPharaon/NEFERTEM-Website` → live https://nefertem.pages.dev.
 
-1. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-2. Sélectionner le repo `UlkhadPharaon/Voix-d-or-marketing-offers-2`, branche `main`.
-3. Réglages de build :
-   - **Framework preset** : `Vite`
-   - **Build command** : `npm run build`
-   - **Build output directory** : `dist`
-   - **Node version** : `20` (fichier `.nvmrc` déjà présent)
-4. Variables d'environnement (Build) :
-   - `PUPPETEER_SKIP_DOWNLOAD=true` (évite le téléchargement Chrome de `puppeteer`, inutilisé au build)
-5. **Save and Deploy**. Chaque `git push` sur `main` redéploie automatiquement.
-   Les PR obtiennent une URL de prévisualisation.
+## Déploiement (Direct Upload — méthode active)
+
+```bash
+npm run build          # ou wrapper one-shot en session agent (guard watch-process)
+npx wrangler pages deploy dist --project-name nefertem --branch main --commit-dirty true
+```
+
+- `--branch main` **obligatoire** : sans ce flag le build part sur une branche de
+  preview et le domaine canonique `nefertem.pages.dev` sert l'ancien build.
+- L'API Cloud refuse de poser `source` sur un projet Direct Upload
+  (« cannot update the `source` object in a Direct Uploads project ») — la
+  connexion Git passe donc par le dashboard.
+
+## Auto-deploy Git (connexion dashboard, ~2 min)
+
+Dashboard → Workers & Pages → `nefertem` → Settings → Build & deployments →
+**Connect to Git repository** :
+
+| Réglage | Valeur |
+|---|---|
+| Repo | `UlkhadPharaon/NEFERTEM-Website` |
+| Branche de production | `main` |
+| Framework preset | Vite |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Env build | `PUPPETEER_SKIP_DOWNLOAD=true` |
+| Node version | 20 (fichier `.nvmrc`) |
+
+Après connexion : chaque push sur `main` redéploie, les PR ont une URL de preview.
 
 ## Déjà prêt dans le repo
 
@@ -27,6 +46,9 @@ Site statique Vite + React (SPA). Aucune variable d'environnement requise pour l
 ## Domaine personnalisé
 
 Pages → **Custom domains** → ajouter le domaine → Cloudflare crée le DNS automatiquement si la zone est chez Cloudflare.
+
+Le SEO (`sitemap.xml`, canonical `VITE_SITE_URL`) référence déjà `https://nefertem.africa` :
+rattacher ce domaine au projet Pages quand la zone DNS est prête.
 
 ## Dépannage
 
